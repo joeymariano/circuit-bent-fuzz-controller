@@ -1,8 +1,18 @@
+// Circuit Bent Fuzz / Distortion Controller
+// meant to add buttons to a guitar pedal
+// these buttons open and close circuit bends in a musical way
+// first iteration will have one button to control 4 modes:
+// 1. momentary
+// 2. momentary tremolo
+// 3. latching
+// 4. latching tremelo
+// two buttons and two transistor switches
+
 // idea => hook main LED to arduino and use it to blink the mode
 // use power from LED to power the arduino?
 // blink once for mode 1 twice for mode 2 etc.
 
-// transistor switches
+// 2N7000 transistor switches
 int transistorSwitches[] = {5, 6};
 
 // buttons
@@ -10,10 +20,6 @@ int modeButton = 10;
 int buttons[] = {3, 4};
 
 // default mode for switching
-// 1. momentary
-// 2. momentary tremolo
-// 3. latching
-// 4. latching tremelo
 int mode = 1;
 
 int millisReading[] = {0, 0};
