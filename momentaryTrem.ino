@@ -5,18 +5,14 @@ void momentaryTrem(int buttonIndex) {
 
     // if (current time - lastToggleTime) >= tremoloInterval:
     if ((millisReading[buttonIndex] - lastToggleTime[buttonIndex]) >= tremDelay[buttonIndex]) {
-      //  => flip the isOn state (if true, make false; if false, make true).
+      //  => toggle the tremFlag
       tremFlag[buttonIndex] = !tremFlag[buttonIndex];
       //  => update lastToggleTime to current time.
       lastToggleTime[buttonIndex] = millis();
     }
 
     // use tremFlag to decide switch on or off
-    if (tremFlag[buttonIndex]) {
-      digitalWrite(transistorSwitches[buttonIndex], HIGH);
-    } else {
-      digitalWrite(transistorSwitches[buttonIndex], LOW);
-    }
+    digitalWrite(transistorSwitches[buttonIndex], tremFlag[buttonIndex] ? HIGH : LOW);
   } else {
     digitalWrite(transistorSwitches[buttonIndex], LOW);
   }
