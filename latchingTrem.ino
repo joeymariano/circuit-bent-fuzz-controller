@@ -8,7 +8,7 @@ void latchingTrem(int buttonIndex) {
 
   if ((millis() - lastDebounceTime[buttonIndex]) > debounceDelay) {
     if (reading[buttonIndex] == LOW && buttonState[buttonIndex] == HIGH) {
-      transistorState[buttonIndex] = !transistorState[buttonIndex]; // latch ON/OFF
+      transistorState[buttonIndex] = !transistorState[buttonIndex]; // togs the 'll'
       buttonPressed[buttonIndex] = true;
     } else if (reading[buttonIndex] == HIGH && buttonState[buttonIndex] == LOW) {
       buttonPressed[buttonIndex] = false;
@@ -18,7 +18,7 @@ void latchingTrem(int buttonIndex) {
   
   lastButtonState[buttonIndex] = reading[buttonIndex];
 
-  // tremolo logic **only if latched ON**
+  // tremolo logic **only if toggled ON**
   if (transistorState[buttonIndex]) {
     unsigned long now = millis();
     if (now - lastTremToggle[buttonIndex] >= latchingTremDelay[buttonIndex]) {
