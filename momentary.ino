@@ -1,7 +1,5 @@
 void momentary(int buttonIndex) {
-  if (digitalRead(buttons[buttonIndex]) == LOW) {
-    digitalWrite(transistorSwitches[buttonIndex], HIGH);
-  } else {
-    digitalWrite(transistorSwitches[buttonIndex], LOW);
-  }
+// ternary operator is a concise way to write an if-else
+  // if button read LOW write to transistor HIGH else LOW
+  digitalWrite(transistorSwitches[buttonIndex], digitalRead(buttons[buttonIndex]) == LOW ? HIGH : LOW);
 }

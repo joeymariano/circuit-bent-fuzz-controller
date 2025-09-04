@@ -13,7 +13,8 @@
 // blink once for mode 1 twice for mode 2 etc.
 
 // 2N7000 transistor switches
-int transistorSwitches[] = {5, 6};
+int transistorSwitches[] = {5, 6, 2};
+// 2 is for a switch to interupt the pedal's main led
 
 // buttons
 int modeButton = 10;
@@ -51,7 +52,7 @@ void setup() {
     pinMode(buttons[i], INPUT_PULLUP);
     pinMode(transistorSwitches[i], OUTPUT);
   }
-
+  digitalWrite(transistorSwitches[2], HIGH);
   pinMode(modeButton, INPUT_PULLUP);
 }
 
