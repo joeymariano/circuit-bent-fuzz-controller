@@ -22,7 +22,7 @@ void latchingTrem(int buttonIndex) {
   if (transistorState[buttonIndex]) {
     unsigned long now = millis();
     if (now - lastTremToggle[buttonIndex] >= latchingTremDelay[buttonIndex]) {
-      tremOn[buttonIndex] = !tremOn[buttonIndex];   // flip state
+      tremOn[buttonIndex] = !tremOn[buttonIndex];   // toggle the trem effect
       lastTremToggle[buttonIndex] = now;
     }
     // set output pin based on tremOn

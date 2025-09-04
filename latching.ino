@@ -12,8 +12,9 @@ void latching(int buttonIndex) {
   // if current time is less than debounce time
   if ((millis() - lastDebounceTime[buttonIndex]) > debounceDelay) {
     // if button was just pressed (transitioned from HIGH to LOW), 
-    // toggle LED state... do your thang.
+    // toggle LED state... do your thiiing.
     if (reading[buttonIndex] == LOW && buttonState[buttonIndex] == HIGH) {
+      // toggle the transistor state
       transistorState[buttonIndex] = !transistorState[buttonIndex];
       digitalWrite(transistorSwitches[buttonIndex], transistorState[buttonIndex]);
       buttonPressed[buttonIndex] = true;
