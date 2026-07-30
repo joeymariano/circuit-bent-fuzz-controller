@@ -6,4 +6,4 @@
   2. momentary tremolo
   3. latching
   4. latching tremelo
-+ two buttons and two transistor switches
++ three buttons and two transistor switches
