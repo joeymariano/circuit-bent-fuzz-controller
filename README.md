@@ -9,12 +9,13 @@ the other two toggle/stutter two circuit-bend points on the pedal.
 
 Prototyped against a **LANDTONE DIY "Build Your Own Fuzz Pedal" kit** — a through-hole,
 true-bypass fuzz/distortion in a 1590B enclosure (Volume + Drive controls, 9 V).
-See [`docs/landtone-kit/`](docs/landtone-kit/) for kit details and where the controller
-taps in; product listing: [Amazon B06XQL49G8](https://www.amazon.com/dp/B06XQL49G8).
+See [`docs/parts-data/landtone-kit/`](docs/parts-data/landtone-kit/) for kit details and
+where the controller taps in; product listing:
+[Amazon B06XQL49G8](https://www.amazon.com/dp/B06XQL49G8).
 
 ## Controls
 
-- **MODE button** — cycles through the four bend modes (1 → 4 → 1) and blinks the
+- **MODE button** — cycles through the four bend modes (1 → 2 → 3 → 4 →) and blinks the
   pedal's main LED the mode number (1–4) so you can tell which mode you're in.
 - **BTN-1 / BTN-2** — work the two bends according to the current mode.
 
@@ -86,7 +87,10 @@ reselect the port.
 ## Repo contents
 
 - `circuit-bent-fuzz.ino` — the firmware (single file)
-- `SCH_Schematic1_*.pdf`, `SCH_Schematic2_*.pdf` — controller + power schematics
-- `circuit-bent-fuzz*.svg` — enclosure / faceplate layouts
-- `2N7000-orientation-reference.svg` — TO-92 footprint orientation guide
-- `docs/landtone-kit/` — notes on the LANDTONE fuzz kit used to prototype
+- `docs/layouts-schematics/` — controller + power schematics (PDF) and the EasyEDA
+  project source (`bend Platform.eprj`)
+- `docs/drill template/` — enclosure / faceplate layout SVGs
+- `docs/parts-data/` — 2N7000 pinout + footprint-orientation references
+- `docs/parts-data/landtone-kit/` — notes on the LANDTONE fuzz kit used to prototype
+- `docs/prototype wiring pictures/` — build photos
+- `docs/art/` — sticker artwork
