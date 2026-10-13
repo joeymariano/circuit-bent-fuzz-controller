@@ -1,11 +1,12 @@
 // Circuit Bent Fuzz / Distortion Controller
 // Adds footswitches to a guitar fuzz/distortion that open & close circuit "bends"
-// in a musical way, via 2N7000 low-side transistor switches on a Seeeduino XIAO SAMD21.
+// in a musical way, from a Seeeduino XIAO SAMD21 on the Bend Platform v2 PCB.
 //
 // 3 buttons:     MODE (cycles the bend behavior) + 2 bend buttons.
-// 3 transistors: T1 interrupts the pedal's main LED; T2 & T3 are the two circuit bends.
+// 3 MOSFETs:     Q1 interrupts the pedal's main LED; Q2 & Q3 drive the CD4066 switches
+//                that open/close the two circuit bends.
 //
-// Mode indication is on the pedal's main LED via T1 (the "4LED rail"): pressing MODE
+// Mode indication is on the pedal's main LED via Q1 (the "4LED rail"): pressing MODE
 // blinks it the mode number (1..4) as brief dark pulses against its normally-on state.
 //
 // Bend modes cycled by MODE:
@@ -15,8 +16,17 @@
 //   4 latching-trem   - press toggles a stuttering bend on/off
 
 // ---------- pins (per manufactured PCB) ----------
-const uint8_t PEDAL_LED = 1;   // T1/INTRPT gate (D1) - pedal main LED, rest HIGH (on), blinked for mode
+const uint8_t PEDAL_LED = 1;   // Q1/INTRPT gate (D1) - pedal main LED, rest HIGH (on), blinked for mode
 const uint8_t MODE_BTN  = 9;   // D9
+
+// Bend gate polarity. v2: gate HIGH -> AO3400A pulls the CD4066 control low -> bend OPEN,
+// so the bends are active-LOW. Set BOARD_V2 0 for the v1 board (2N7000 directly across the bend).
+#define BOARD_V2 1
+#if BOARD_V2
+const uint8_t BEND_ON = LOW,  BEND_OFF = HIGH;
+#else
+const uint8_t BEND_ON = HIGH, BEND_OFF = LOW;
+#endif
 
 // ---------- tunables ----------
 const unsigned long DEBOUNCE_MS   = 50;
@@ -49,8 +59,8 @@ struct Bend {               // one circuit bend: button + transistor + latch/tre
 
 // ---------- state ----------
 Bend bends[2] = {
-  { { 2, HIGH, 0, false }, 4, false, false, 0 },  // BTN-1 (D2) -> T2 (D4)  bend1
-  { { 3, HIGH, 0, false }, 5, false, false, 0 },  // BTN-2 (D3) -> T3 (D5)  bend2
+  { { 2, HIGH, 0, false }, 5, false, false, 0 },  // BTN-1 (D2) -> Q3 (D5) -> CD4066 A -> BND-1  bend1
+  { { 3, HIGH, 0, false }, 4, false, false, 0 },  // BTN-2 (D3) -> Q2 (D4) -> CD4066 B -> BND-2  bend2
 };
 
 Button modeBtn = { MODE_BTN, HIGH, 0, false };
@@ -82,7 +92,7 @@ bool elapsed(unsigned long &since, unsigned long interval) {
 }
 
 void setSwitch(Bend &b, bool on) {
-  digitalWrite(b.sw, on ? HIGH : LOW);
+  digitalWrite(b.sw, on ? BEND_ON : BEND_OFF);
 }
 
 void tremolo(Bend &b, unsigned long interval) {
@@ -151,7 +161,7 @@ void serviceMode() {
   }
 }
 
-// T1 interrupt test: toggle the pedal LED gate (D1) slowly so the interrupt is obvious.
+// Q1 interrupt test (T1_TEST): toggle the pedal LED gate (D1) slowly so the interrupt is obvious.
 void t1BlinkTest() {
   static unsigned long last = 0;
   static bool on = true;
@@ -167,17 +177,19 @@ void t1BlinkTest() {
 
 // ---------- setup / loop ----------
 void setup() {
+  // Gates first: no external pull-downs, so they float until configured here.
+  // Set the level before switching to OUTPUT so the pin never drives the wrong state.
+  for (int i = 0; i < 2; i++) {
+    digitalWrite(bends[i].sw, BEND_OFF);
+    pinMode(bends[i].sw, OUTPUT);
+  }
+  digitalWrite(PEDAL_LED, HIGH);   // ground leg closed -> pedal's LED works normally
+  pinMode(PEDAL_LED, OUTPUT);
+
   Serial.begin(9600);
 
-  for (int i = 0; i < 2; i++) {
-    pinMode(bends[i].button.pin, INPUT_PULLUP);
-    pinMode(bends[i].sw, OUTPUT);
-    digitalWrite(bends[i].sw, LOW);
-  }
+  for (int i = 0; i < 2; i++) pinMode(bends[i].button.pin, INPUT_PULLUP);
   pinMode(modeBtn.pin, INPUT_PULLUP);
-
-  pinMode(PEDAL_LED, OUTPUT);
-  digitalWrite(PEDAL_LED, HIGH);   // ground leg closed -> pedal's LED works normally
 
 #if LOG
   Serial.println("circuit-bent-fuzz ready");

@@ -1,9 +1,13 @@
 # Circuit Bent Fuzz / Distortion Controller
 
 Adds footswitches to a guitar fuzz/distortion pedal that open and close circuit
-"bends" in a musical way. A Seeeduino XIAO (SAMD21) drives three **2N7000** low-side
-transistor switches: one interrupts the pedal's main LED (used as a mode indicator),
-the other two toggle/stutter two circuit-bend points on the pedal.
+"bends" in a musical way. A Seeeduino XIAO (SAMD21) on the **Bend Platform v2** PCB
+drives three **AO3400A** MOSFETs. One interrupts the pedal's main LED, which is used as
+the mode indicator. The other two drive a **CD4066** analog switch that toggles or
+stutters two circuit-bend points on the pedal.
+
+See [`HARDWARE-V2-NOTES.md`](HARDWARE-V2-NOTES.md) for the v2 board review notes: bend
+polarity, CD4066 limits, and power cautions.
 
 ## Prototype platform
 
@@ -28,37 +32,52 @@ where the controller taps in; product listing:
 | 3 | latching          | press toggles the bend on/off                |
 | 4 | latching tremolo  | press toggles a stuttering bend on/off       |
 
-## Pin map (Seeeduino XIAO SAMD21, per the manufactured PCB)
+## Pin map (Seeeduino XIAO SAMD21, Bend Platform v2 PCB)
 
-| Signal            | Pin | Net          | Notes                                  |
-|-------------------|-----|--------------|----------------------------------------|
-| MODE button       | D9  | MODE         | `INPUT_PULLUP`, to GND                  |
-| BTN-1             | D2  | BTN-1        | `INPUT_PULLUP`, to GND                  |
-| BTN-2             | D3  | BTN-2        | `INPUT_PULLUP`, to GND                  |
-| T1 gate           | D1  | INTRPT       | interrupts the pedal's main LED         |
-| T2 gate           | D4  | BND-1        | circuit bend 1                          |
-| T3 gate           | D5  | BND-2        | circuit bend 2                          |
+| Signal            | Pin | Drives / net                          | Notes                                  |
+|-------------------|-----|---------------------------------------|----------------------------------------|
+| MODE button       | D9  | MODE                                  | `INPUT_PULLUP`, to GND                  |
+| BTN-1             | D2  | BTN-1                                 | `INPUT_PULLUP`, to GND                  |
+| BTN-2             | D3  | BTN-2                                 | `INPUT_PULLUP`, to GND                  |
+| Q1 gate           | D1  | LED- pad (Q1 drain; source on GND)    | interrupts the pedal's main LED         |
+| Q3 gate           | D5  | CD4066 CONTROL A → BND-1 / BND-1-OUT  | bend 1 (BTN-1); **active LOW**          |
+| Q2 gate           | D4  | CD4066 CONTROL B → BND-2 / BND-2-OUT  | bend 2 (BTN-2); **active LOW**          |
 
-Each transistor gate is fed through a 220 Ω resistor. The buttons pull to GND.
+The gates are driven directly, with no series resistors and no external pull-downs.
+The firmware sets the gate pins first thing in `setup()`. The buttons pull to GND.
 
 ## Hardware wiring notes
 
-The transistors are **low-side switches** — they go in the **ground leg** of what
-they control, never in the supply leg (an N-channel FET can't switch the high side).
+### Bends (CD4066)
 
-For the LED interrupt (T1), the current must flow **drain → source**:
+Each bend is a CD4066 switch. Q2 and Q3 pull its control pin low against a 10k pull-up
+to 9 V, so the logic is inverted: **gate HIGH = bend open, gate LOW = bend closed**.
+The firmware handles this with `BEND_ON` / `BEND_OFF`. Set `#define BOARD_V2 0` to run
+on the old v1 2N7000 wiring.
 
-- **INTRPT (drain)** → the LED's cathode / ground-side leg (the more-positive side)
-- **INTRPT_OUT (source)** → **ground** (common with the XIAO's ground)
-- splice T1 **in series with** the pedal's own LED-ground switch (e.g. the 3PDT lug),
-  not in place of it, so the pedal still controls on/off and T1 only blinks it
+From the TI CD4066B datasheet:
 
-If drain and source are reversed, the MOSFET's body diode conducts and the LED will
-never fully turn off (it only dims by ~0.5 V) — swap the two outer legs to fix it.
+- The pedal being bent **must share ground** with the platform (the GND pad).
+- Bend-point signals must stay **between 0 V and 9 V** relative to that ground.
+- At most **10 mA** through each switch. On-resistance is about 180–400 Ω at 9 V.
 
-Note: a plain 2N7000 driven from 3.3 V logic is only marginally on (threshold spec up
-to 3 V). It works for the ground-referenced LED; for bends bridging arbitrary pedal
-nodes a relay / CD4066 / optocoupler is more reliable.
+### LED interrupt (Q1)
+
+Q1 is an N-channel MOSFET used as a low-side switch: drain → the **LED-** pad, source →
+the platform's GND. Keep it **in series with** the pedal's own LED-ground switch (the
+3PDT lug), not in place of it, so the pedal still controls on/off and Q1 only blinks it:
+lift the ground wire from the 3PDT's LED common lug and run that lug to **LED-** instead.
+The LED's return path is then LED cathode → 3PDT → LED- → Q1 → GND, which relies on the
+pedal sharing ground with the platform (it must anyway, for the bends).
+
+### Power
+
+9 V battery → SS14 reverse-polarity diode → L78M05 → the XIAO's 5V pin.
+
+- A reversed battery is blocked by the diode.
+- The regulator drops out once the battery sags to about 7.4 V.
+- **Don't plug in USB while the battery is connected.** USB would back-feed into the
+  regulator output.
 
 ## Serial log
 
@@ -70,7 +89,7 @@ BTN-1 -> bend1 latched ON
 ```
 
 Set `#define LOG 0` to compile it out. `#define T1_TEST 1` swaps in a standalone
-slow on/off test of the T1 LED-interrupt for bench debugging.
+slow on/off test of the Q1 LED interrupt for bench debugging.
 
 ## Build
 
@@ -87,10 +106,14 @@ reselect the port.
 ## Repo contents
 
 - `circuit-bent-fuzz.ino` — the firmware (single file)
-- `docs/layouts-schematics/` — controller + power schematics (PDF) and the EasyEDA
-  project source (`bend Platform.eprj`)
-- `docs/drill template/` — enclosure / faceplate layout SVGs
-- `docs/parts-data/` — 2N7000 pinout + footprint-orientation references
+- `HARDWARE-V2-NOTES.md` — Bend Platform v2 board review and firmware notes
+- `docs/layouts-schematics/prototype/` — v1 prototype schematics (PDF) and EasyEDA
+  project (`bend Platform.eprj`). The v2 project (`bend Platform-v2.eprj`) lives in
+  the EasyEDA Pro projects folder.
+- `docs/drill-template/` — enclosure / faceplate layout SVGs
+- `docs/bend-locations/` — annotated photos of the bend points on the fuzz
+- `docs/parts-data/chips/` — CD4066B, XIAO and op-amp datasheets
+- `docs/parts-data/transistors/` — AO3400A and 2N7000 datasheets / pinouts
 - `docs/parts-data/landtone-kit/` — notes on the LANDTONE fuzz kit used to prototype
-- `docs/prototype wiring pictures/` — build photos
+- `docs/prototype-wiring/` — build photos
 - `docs/art/` — sticker artwork
