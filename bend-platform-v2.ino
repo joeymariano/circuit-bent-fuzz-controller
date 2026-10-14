@@ -1,4 +1,4 @@
-// Circuit Bent Fuzz / Distortion Controller
+// Bend Platform v2
 // Adds footswitches to a guitar fuzz/distortion that open & close circuit "bends"
 // in a musical way, from a Seeeduino XIAO SAMD21 on the Bend Platform v2 PCB.
 //
@@ -192,7 +192,7 @@ void setup() {
   pinMode(modeBtn.pin, INPUT_PULLUP);
 
 #if LOG
-  Serial.println("circuit-bent-fuzz ready");
+  Serial.println("bend-platform-v2 ready");
   Serial.print("mode 1 ("); Serial.print(MODE_NAMES[1]); Serial.println(")");
 #endif
 

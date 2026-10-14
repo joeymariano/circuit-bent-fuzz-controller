@@ -1,4 +1,4 @@
-# Circuit Bent Fuzz / Distortion Controller
+# Bend Platform v2
 
 Adds footswitches to a guitar fuzz/distortion pedal that open and close circuit
 "bends" in a musical way. A Seeeduino XIAO (SAMD21) on the **Bend Platform v2** PCB
@@ -105,7 +105,7 @@ reselect the port.
 
 ## Repo contents
 
-- `circuit-bent-fuzz.ino` — the firmware (single file)
+- `bend-platform-v2.ino` — the firmware (single file)
 - `HARDWARE-V2-NOTES.md` — Bend Platform v2 board review and firmware notes
 - `docs/layouts-schematics/prototype/` — v1 prototype schematics (PDF) and EasyEDA
   project (`bend Platform.eprj`). The v2 project (`bend Platform-v2.eprj`) lives in

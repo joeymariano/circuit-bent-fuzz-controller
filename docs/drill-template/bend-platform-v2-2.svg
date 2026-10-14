@@ -8,7 +8,7 @@
    version="1.1"
    id="svg1"
    inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
-   sodipodi:docname="circuit-bent-fuzz.svg"
+   sodipodi:docname="bend-platform-v2-2.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -24,14 +24,15 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      inkscape:zoom="0.96578478"
-     inkscape:cx="115.96787"
-     inkscape:cy="190.51864"
-     inkscape:window-width="1264"
+     inkscape:cx="66.267352"
+     inkscape:cy="212.26261"
+     inkscape:window-width="1280"
      inkscape:window-height="732"
      inkscape:window-x="8"
      inkscape:window-y="933"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer1"
+     inkscape:export-bgcolor="#ffffffff" />
   <defs
      id="defs1">
     <rect
@@ -80,16 +81,16 @@
     <circle
        style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0;stroke-linejoin:round;stroke-dasharray:none"
        id="path1"
-       cx="29.810904"
-       cy="83"
+       cx="29.560904"
+       cy="79.5"
        r="6" />
     <rect
        style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0;stroke-linejoin:round;stroke-dasharray:none"
        id="rect1"
        width="0.5"
-       height="22"
+       height="25.5"
        x="29.310904"
-       y="89" />
+       y="85.5" />
     <rect
        style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0;stroke-linejoin:round;stroke-dasharray:none"
        id="rect1-8"
@@ -160,19 +161,19 @@
        style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
        id="path4"
        cx="10.513629"
-       cy="38.220287"
+       cy="40.057789"
        r="6" />
     <circle
        style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
        id="path4-4"
-       cx="30.060904"
-       cy="51.470287"
+       cx="10.231737"
+       cy="91.29583"
        r="6" />
     <circle
        style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"
        id="path4-4-3"
        cx="49.5"
-       cy="38.31144"
+       cy="40.148941"
        r="6" />
     <text
        xml:space="preserve"
@@ -181,7 +182,7 @@
        style="font-size:16px;line-height:18.24px;font-family:Arial;-inkscape-font-specification:Arial;text-align:start;letter-spacing:1px;word-spacing:1px;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect4);display:inline;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"><tspan
          x="226.77148"
          y="35.276211"
-         id="tspan1">VOL</tspan></text>
+         id="tspan3">VOL</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,-73.631656,10.438049)"
@@ -189,6 +190,27 @@
        style="font-size:16px;line-height:18.24px;font-family:Arial;-inkscape-font-specification:Arial;text-align:start;letter-spacing:1px;word-spacing:1px;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect4-7);display:inline;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0"><tspan
          x="226.77148"
          y="35.276211"
-         id="tspan2">DRV</tspan></text>
+         id="tspan4">DRV</tspan></text>
+    <rect
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.19945;stroke-linejoin:round"
+       id="rect2"
+       width="1.8005497"
+       height="9.0005503"
+       x="60"
+       y="54.199455" />
+    <rect
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.19945;stroke-linejoin:round"
+       id="rect2-9"
+       width="1.8005497"
+       height="9.0005503"
+       x="-1.9002748"
+       y="54.099724" />
+    <rect
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.226401;stroke-linejoin:round"
+       id="rect2-3"
+       width="1.7735983"
+       height="11.773599"
+       x="60.015774"
+       y="73.613197" />
   </g>
 </svg>
