@@ -1,5 +1,7 @@
 # Bend Platform v2
 
+![Bend Platform v2 PCB render](docs/layouts-schematics/3D_PCB1_2026-10-15.png)
+
 Adds footswitches to a guitar fuzz/distortion pedal that open and close circuit
 "bends" in a musical way. A Seeeduino XIAO (SAMD21) on the **Bend Platform v2** PCB
 drives three **AO3400A** MOSFETs. One interrupts the pedal's main LED, which is used as
